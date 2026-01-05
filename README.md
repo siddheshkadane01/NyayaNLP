@@ -71,8 +71,8 @@ From the project notes:
 Create and activate a virtual environment:
 
 ```bash
-python -m venv legal_ai
-source legal_ai/bin/activate
+python -m venv .venv
+source .venv/bin/activate
 ```
 
 Install dependencies (core set used in the notes):
