@@ -1,0 +1,17 @@
+# Core ML/NLP
+torch
+transformers
+datasets
+seqeval
+peft
+
+# Indic + semantic alignment
+indic-nlp-library
+sentence-transformers
+
+# API + utilities
+fastapi
+uvicorn
+pandas
+numpy
+scikit-learn

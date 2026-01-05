@@ -1,0 +1,23 @@
+# Virtual environments
+legal_ai/
+.venv/
+
+# Python caches
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# ML artifacts / checkpoints
+*.pt
+*.pth
+*.ckpt
+*.bin
+*.safetensors
+
+# HuggingFace cache (optional)
+.hf_cache/
+
+# OS / editor
+.DS_Store
+.vscode/
