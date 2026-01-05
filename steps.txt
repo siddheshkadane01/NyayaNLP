@@ -1,0 +1,382 @@
+Perfect.
+Below is a FULL PROJECT, RESEARCH-GRADE, STEP-BY-STEP GUIDE to build a Multilingual Legal NLP System using the datasets we discussed — not an MVP, but a complete end-to-end project suitable for:
+	•	Research internship
+	•	Conference paper groundwork
+	•	Strong resume + GitHub project
+	•	Real multilingual legal AI system
+
+This is written like a project execution manual. Follow it sequentially.
+
+⸻
+
+📘 FULL PROJECT GUIDE
+
+Multilingual Legal NLP for Indian Languages
+
+⸻
+
+🔷 PROJECT GOAL (FINAL)
+
+Build a multilingual legal NLP system that performs legal entity extraction, clause segmentation, and cross-lingual consistency analysis across English + Indian languages, using transformer-based models.
+
+⸻
+
+🧠 FINAL TASKS COVERED
+
+Task	Status
+Legal NER	✅
+Clause / Section Extraction	✅
+Cross-lingual Transfer	✅
+Semantic Alignment	✅
+Evaluation & Error Analysis	✅
+API Deployment	✅
+Research-grade Reporting	✅
+
+
+⸻
+
+🧱 TECHNOLOGY STACK
+
+NLP / ML
+	•	PyTorch
+	•	HuggingFace Transformers
+	•	XLM-RoBERTa
+	•	IndicBERT (comparison)
+	•	PEFT (LoRA)
+
+Data
+	•	InLegalNER
+	•	HLDC
+	•	MILPaC
+	•	IL-TUR
+
+Backend
+	•	FastAPI
+	•	Docker
+
+⸻
+
+🟦 STEP 0 — PROJECT SETUP (MANDATORY)
+
+0.1 Environment
+
+python -m venv legal_ai
+source legal_ai/bin/activate
+
+pip install torch transformers datasets seqeval peft
+pip install indic-nlp-library sentence-transformers
+pip install fastapi uvicorn pandas numpy scikit-learn
+
+
+⸻
+
+0.2 Repository Structure
+
+legal-ai/
+│
+├── data/
+│   ├── raw/
+│   ├── processed/
+│   ├── annotated/
+│
+├── training/
+│   ├── ner_train.py
+│   ├── clause_train.py
+│
+├── evaluation/
+│   ├── metrics.py
+│   ├── error_analysis.py
+│
+├── inference/
+│   ├── ner_infer.py
+│
+├── api/
+│   ├── app.py
+│
+└── report/
+
+
+⸻
+
+🟦 STEP 1 — DATASET ACQUISITION & ROLE ASSIGNMENT
+
+1.1 Dataset → Task Mapping
+
+Dataset	Role
+InLegalNER	English Legal NER
+HLDC	Hindi Legal Corpus
+MILPaC	Cross-lingual alignment
+IL-TUR	Benchmark evaluation
+
+
+⸻
+
+🟦 STEP 2 — ENGLISH LEGAL NER (InLegalNER)
+
+2.1 Load Dataset
+
+from datasets import load_dataset
+dataset = load_dataset("opennyaiorg/InLegalNER")
+
+
+⸻
+
+2.2 Normalize Labels (CRITICAL)
+
+Create a unified label schema:
+
+O
+B-ACT / I-ACT
+B-SECTION / I-SECTION
+B-CLAUSE / I-CLAUSE
+B-DATE / I-DATE
+
+Map fine-grained labels → unified schema.
+
+⸻
+
+2.3 Train / Validation Split
+
+dataset = dataset["train"].train_test_split(test_size=0.1)
+
+
+⸻
+
+🟦 STEP 3 — HINDI LEGAL DATA (HLDC)
+
+3.1 Sentence Segmentation
+
+Split judgments into sentences using:
+	•	punctuation
+	•	legal markers (धारा, अनुच्छेद)
+
+⸻
+
+3.2 Annotation (Human-in-the-Loop)
+
+Use Label Studio to annotate:
+	•	ACT
+	•	SECTION
+	•	CLAUSE
+	•	DATE
+
+Target:
+	•	1,000–1,500 Hindi sentences (research-grade)
+
+⸻
+
+3.3 Quality Control
+	•	Inter-annotator agreement
+	•	Manual review of conflicts
+
+⸻
+
+🟦 STEP 4 — MULTILINGUAL DATA UNIFICATION
+
+4.1 Merge English + Hindi
+
+Convert both datasets into HuggingFace Token Classification format.
+
+⸻
+
+4.2 Token Alignment
+
+tokenizer = AutoTokenizer.from_pretrained("xlm-roberta-base")
+
+Ensure:
+	•	Correct subword label propagation
+	•	Ignore continuation tokens (-100)
+
+⸻
+
+🟦 STEP 5 — BASE MODEL TRAINING
+
+5.1 Model Selection
+
+Primary:
+
+XLM-RoBERTa-base
+
+Baseline:
+
+IndicBERT
+
+
+⸻
+
+5.2 Training Configuration
+
+TrainingArguments(
+  learning_rate=2e-5,
+  per_device_train_batch_size=8,
+  num_train_epochs=5,
+  evaluation_strategy="epoch",
+  save_strategy="epoch"
+)
+
+
+⸻
+
+5.3 Train Legal NER
+
+Use Trainer with:
+	•	SeqEval metrics
+	•	Language-wise evaluation
+
+⸻
+
+🟦 STEP 6 — PARAMETER-EFFICIENT FINE-TUNING (LoRA)
+
+6.1 Apply LoRA
+
+from peft import LoraConfig, get_peft_model
+
+Benefits:
+	•	Faster training
+	•	Lower memory
+	•	Better domain adaptation
+
+⸻
+
+6.2 Compare:
+	•	Full fine-tuning
+	•	LoRA fine-tuning
+
+⸻
+
+🟦 STEP 7 — CLAUSE & SECTION SEGMENTATION
+
+7.1 Problem Formulation
+
+Sentence-level classification:
+
+CLAUSE_START / CLAUSE_CONTINUE
+
+
+⸻
+
+7.2 Dataset Creation
+
+Use:
+	•	MILPaC aligned statutes
+	•	Annotated IPC sections
+
+⸻
+
+7.3 Model
+	•	XLM-R Sentence Classifier
+	•	Binary / Multi-class classification
+
+⸻
+
+🟦 STEP 8 — CROSS-LINGUAL TRANSFER (CORE RESEARCH)
+
+8.1 Zero-Shot Evaluation
+
+Train on:
+	•	English only
+
+Test on:
+	•	Hindi / Marathi
+
+⸻
+
+8.2 Few-Shot Adaptation
+
+Fine-tune with:
+	•	50–200 samples per language
+
+Measure:
+	•	Performance delta
+
+⸻
+
+🟦 STEP 9 — SEMANTIC ALIGNMENT & CONSISTENCY
+
+9.1 Sentence Embeddings
+
+from sentence_transformers import SentenceTransformer
+
+
+⸻
+
+9.2 Legal Meaning Consistency
+
+Compare:
+	•	English statute vs Hindi statute
+	•	Cosine similarity
+
+Flag mismatches.
+
+⸻
+
+🟦 STEP 10 — EVALUATION & ERROR ANALYSIS
+
+10.1 Metrics
+	•	Precision / Recall / F1
+	•	Language-wise breakdown
+	•	Entity-wise breakdown
+
+⸻
+
+10.2 Error Analysis
+
+Analyze:
+	•	Boundary errors
+	•	Translation ambiguity
+	•	Script-specific issues
+
+⸻
+
+🟦 STEP 11 — API & SYSTEM DEPLOYMENT
+
+11.1 FastAPI Backend
+
+Endpoints:
+
+/extract-entities
+/segment-clauses
+
+
+⸻
+
+11.2 Model Loading Optimization
+	•	Load once at startup
+	•	Batch inference
+
+⸻
+
+11.3 Dockerize
+
+FROM python:3.10
+
+
+⸻
+
+🟦 STEP 12 — FINAL REPORT & RESEARCH OUTPUT
+
+12.1 Report Structure
+	1.	Introduction
+	2.	Related Work
+	3.	Dataset Construction
+	4.	Model Architecture
+	5.	Experiments
+	6.	Results
+	7.	Error Analysis
+	8.	Limitations
+
+⸻
+
+12.2 What You’ll Have at the End
+
+✅ Research-grade multilingual legal model
+✅ Annotated datasets
+✅ Deployed system
+✅ Strong publication-ready work
+
+⸻
+
+🎓 HOW THIS LOOKS ON YOUR RESUME
+
+Designed and implemented a multilingual legal NLP system for Indian statutes using transformer models, covering legal NER, clause segmentation, and cross-lingual semantic alignment across English and Indic languages.
+
