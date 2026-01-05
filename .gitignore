@@ -15,6 +15,11 @@ __pycache__/
 *.bin
 *.safetensors
 
+# Data folders (keep big files out of git)
+data/raw/
+data/processed/
+data/annotated/
+
 # HuggingFace cache (optional)
 .hf_cache/
 
